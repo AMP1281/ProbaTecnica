@@ -1,49 +1,57 @@
 <template>
+
+
   <b-container fluid="md">
+
+    <FormInputNumber placeholder="Width" @widthOk="wOk=$event"/>
+
       <b-card-group deck>
 
         <b-card header="Input Comands">
 
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
-            <!--Dimensions of the square:-->
+            <!--Dimensions:-->
               <b-form-group
-                id="input-group-1"
                 label="Dimensions of the square:"
-                label-for="input-1"
               >
-                <b-form inline class="d-flex justify-content-between">
+                <b-form inline class="d-flex justify-content-around">
+
+                  <FormInputNumber placeholder="Width" @widthOk="wOk=$event"/>
+
                     <b-form-input
                       id="input-1"
                       v-model="form.iWidth"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="width"
+                      placeholder="Width"
                       class="text-center"
-                      required 
                       ></b-form-input>
+
                   x
+
                     <b-form-input
                       id="input-2"
                       v-model="form.iHeight"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="height"
+                      placeholder="Height"
                       class="text-center"
-                      required
                     ></b-form-input>
+
                 </b-form>
+
               </b-form-group>
 
-            <!--Initial coordinates::-->
+            <!--Coordinates:-->
               <b-form-group
                 id="input-group-2"
                 label="Initial coordinates:"
-                label-for="input-2"
               >
-                <b-form inline class="d-flex justify-content-between">
+                <b-form inline class="d-flex justify-content-around">
+
                     <b-form-input
                       id="input-3"
                       v-model="form.iX"
@@ -52,9 +60,10 @@
                       step="1"
                       placeholder="X"
                       class="text-center"
-                      required
                     ></b-form-input>
+
                   x
+
                     <b-form-input
                       id="input-4"
                       v-model="form.iY"
@@ -63,41 +72,58 @@
                       step="1"
                       placeholder="Y"
                       class="text-center"
-                      required
                     ></b-form-input>
+
                 </b-form>
+
               </b-form-group>
 
             <!--Orientation-->
-              <b-form-group id="input-group-3" label="Initial orientation" label-for="input-3">
-                <b-form-select
+              <b-form-group
+                id="input-group-3"
+                label="Initial orientation">
+                <b-form-radio-group
                   id="input-5"
                   v-model="form.iOrientation"
-                  type="text"
                   :options="orientation"
+                  class="d-flex justify-content-around"
                   required
-                ></b-form-select>
+                ></b-form-radio-group>
               </b-form-group>
 
             <!--Comands-->
-              <b-form-group id="input-group-4" label="Comands:" label-for="input-4"
-              description="Please enter a set of commands: Advance (A), Turn left (L), Turn Right (R). ">
+              <b-form-group 
+                id="input-group-4"
+                label="Comands:"
+                description="Please enter a set of commands: Advance (A), Turn left (L), Turn Right (R). ">
                 <b-input-group>
-                  <b-input-group-prepend>
-                    <b-button type="button" variant="outline-secondary" v-b-tooltip.hover title="Advance">A</b-button>
-                    <b-button type="button" variant="outline-secondary" v-b-tooltip.hover title="Turn left">L</b-button>
-                    <b-button type="button" variant="outline-secondary" v-b-tooltip.hover title="Turn Right">R</b-button>
-                  </b-input-group-prepend>
-                <b-form-input
-                  id="input-6"
-                  v-model="form.iComands"
-                  required
-                ></b-form-input>
+
+                      <b-input-group-prepend>
+
+                        <b-button variant="outline-secondary" id="Advance">A</b-button>
+                        <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
+
+                        <b-button variant="outline-secondary" id="turnLeft">L</b-button>
+                        <b-tooltip target="turnLeft" variant="secondary" placement="top">Turn left</b-tooltip>
+
+                        <b-button variant="outline-secondary" id="turnRight">R</b-button>
+                        <b-tooltip target="turnRight" variant="secondary" placement="topright">Turn Right</b-tooltip>
+
+                      </b-input-group-prepend>
+
+                    <b-form-input
+                      id="input-6"
+                      v-model="form.iComands"
+                      type="text"
+                      required
+                      readonly
+                    ></b-form-input>
+
                 </b-input-group>
+
               </b-form-group>
 
             <!--buttons-->
-            
               <b-button type="submit" variant="primary">Submit</b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
 
@@ -115,38 +141,56 @@
 </template>
 
 <script>
+
+import FormInputNumber from './FormInputNumber.vue'
+
 export default {
   name: 'Form',
+
+  components:{
+    FormInputNumber
+  },
+
   data() {
       return {
+
         form: {
-          email: '',
-          name: '',
-          food: null,
-          checked: []
+          iWidth: '',
+          iHeight: '',
+          iX:'',
+          iY:'',
+          iOrientation: null,
+          iComands:''
         },
+
         orientation: [
-          { text: '-- Please select an option --', value: null }, 'N', 'S', 'E', 'W'
+          { text: 'North', value: 'N'},
+          { text: 'South', value: 'S'},
+          { text: 'East', value: 'E'},
+          { text: 'West', value: 'W'},
           ],
         show: true
       }
     },
+
     methods: {
       onSubmit(event) {
         event.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
+    },
+
       onReset(event) {
         event.preventDefault()
         // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
+          this.form.iWidth= '',
+          this.form.iHeight= '',
+          this.form.iX='',
+          this.form.iY='',
+          this.form.iOrientation= null,
+          this.form.iComands=''
         // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
+          this.show = false
+          this.$nextTick(() => {
+            this.show = true
         })
       }
     }
