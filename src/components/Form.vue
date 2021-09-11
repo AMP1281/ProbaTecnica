@@ -166,8 +166,6 @@ export default {
 
         show: true,
 
-        fy:''
-
       }
 
     },
@@ -190,15 +188,15 @@ export default {
 
         event.preventDefault();
 
-        var self = this;
-        var fY = this.form.iY;
-        var fX = this.form.iX;
-        var fO = this.form.iOrientation;
+        let self = this;
+        let fY = this.form.iY;
+        let fX = this.form.iX;
+        let fO = this.form.iOrientation;
 
         this.form.iComands.forEach(function(element){
 
-            if(element == 'A' && self.form.iOrientation == 'N'){
-                return fY++ ;
+            if(element == 'A' && self.form.iOrientation == 'N'){ 
+              return fY++ ;
             }
             if(element == 'A' && self.form.iOrientation == 'S'){
                 return fY-- ;
@@ -238,7 +236,17 @@ export default {
 
             console.log(fO);
 
+            inOut();
+
         });
+
+        function inOut(){
+          if(fY>this.iHeight || fX>this.iWidth){
+            return "False";
+          }else{
+            return "True";
+          }
+        }
 
       },
 
