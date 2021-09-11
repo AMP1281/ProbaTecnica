@@ -3,7 +3,6 @@
 
   <b-container fluid="md">
 
-    <FormInputNumber placeholder="Width" @widthOk="wOk=$event"/>
 
       <b-card-group deck>
 
@@ -12,12 +11,9 @@
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
             <!--Dimensions:-->
-              <b-form-group
-                label="Dimensions of the square:"
-              >
-                <b-form inline class="d-flex justify-content-around">
+              <b-form-group label="Dimensions of the square:">
 
-                  <FormInputNumber placeholder="Width" @widthOk="wOk=$event"/>
+                <b-form inline class="d-flex justify-content-around">
 
                     <b-form-input
                       id="input-1"
@@ -26,8 +22,8 @@
                       min="0"
                       step="1"
                       placeholder="Width"
-                      class="text-center"
-                      ></b-form-input>
+                      class="text-center">
+                    </b-form-input>
 
                   x
 
@@ -38,8 +34,8 @@
                       min="0"
                       step="1"
                       placeholder="Height"
-                      class="text-center"
-                    ></b-form-input>
+                      class="text-center">
+                    </b-form-input>
 
                 </b-form>
 
@@ -48,8 +44,8 @@
             <!--Coordinates:-->
               <b-form-group
                 id="input-group-2"
-                label="Initial coordinates:"
-              >
+                label="Initial coordinates:">
+
                 <b-form inline class="d-flex justify-content-around">
 
                     <b-form-input
@@ -87,8 +83,8 @@
                   v-model="form.iOrientation"
                   :options="orientation"
                   class="d-flex justify-content-around"
-                  required
-                ></b-form-radio-group>
+                  required>
+                </b-form-radio-group>
               </b-form-group>
 
             <!--Comands-->
@@ -100,13 +96,13 @@
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="Advance">A</b-button>
+                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()">A</b-button>
                         <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="turnLeft">L</b-button>
+                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()">L</b-button>
                         <b-tooltip target="turnLeft" variant="secondary" placement="top">Turn left</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="turnRight">R</b-button>
+                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()">R</b-button>
                         <b-tooltip target="turnRight" variant="secondary" placement="topright">Turn Right</b-tooltip>
 
                       </b-input-group-prepend>
@@ -116,8 +112,8 @@
                       v-model="form.iComands"
                       type="text"
                       required
-                      readonly
-                    ></b-form-input>
+                      readonly>
+                    </b-form-input>
 
                 </b-input-group>
 
@@ -133,23 +129,19 @@
 
         <b-card>
           <p>test</p>
+          <p>{{fY}}</p>
         </b-card>
 
-
      </b-card-group>
+
   </b-container>
+
 </template>
 
 <script>
 
-import FormInputNumber from './FormInputNumber.vue'
-
 export default {
   name: 'Form',
-
-  components:{
-    FormInputNumber
-  },
 
   data() {
       return {
@@ -157,26 +149,98 @@ export default {
         form: {
           iWidth: '',
           iHeight: '',
+
           iX:'',
           iY:'',
-          iOrientation: null,
-          iComands:''
+
+          iOrientation: '',
+          iComands: [],
         },
 
         orientation: [
           { text: 'North', value: 'N'},
           { text: 'South', value: 'S'},
           { text: 'East', value: 'E'},
-          { text: 'West', value: 'W'},
+          { text: 'West', value: 'W'}
           ],
-        show: true
+
+        show: true,
+
+        fy:''
+
       }
+
     },
 
     methods: {
+
+      agregarA() {
+        this.form.iComands.push("A")
+      },
+
+      agregarL(){
+        this.form.iComands.push("L")
+      },
+
+      agregarR(){
+        this.form.iComands.push("R")
+      },
+
       onSubmit(event) {
-        event.preventDefault()
-    },
+
+        event.preventDefault();
+
+        var self = this;
+        var fY = this.form.iY;
+        var fX = this.form.iX;
+        var fO = this.form.iOrientation;
+
+        this.form.iComands.forEach(function(element){
+
+            if(element == 'A' && self.form.iOrientation == 'N'){
+                return fY++ ;
+            }
+            if(element == 'A' && self.form.iOrientation == 'S'){
+                return fY-- ;
+            }
+            if(element == 'A' && self.form.iOrientation == 'E'){
+                return fX++ ;
+            }
+            if(element == 'A' && self.form.iOrientation == 'W'){
+                return fX-- ;
+            }
+
+            if(element == 'L' && self.form.iOrientation == 'N'){
+                return fO ='W';
+            }
+            if(element == 'L' && self.form.iOrientation == 'S'){
+                return fO ='E' ;
+            }
+            if(element == 'L' && self.form.iOrientation == 'E'){
+                return fO='N' ;
+            }
+            if(element == 'L' && self.form.iOrientation == 'W'){
+                return fO='S' ;
+            }
+
+            if(element == 'R' && self.form.iOrientation == 'N'){
+                return fO='E' ;
+            }
+            if(element == 'R' && self.form.iOrientation == 'S'){
+                return fO='W' ;
+            }
+            if(element == 'R' && self.form.iOrientation == 'E'){
+                return fO='S' ;
+            }
+            if(element == 'R' && self.form.iOrientation == 'W'){
+                return fO='N' ;
+            }
+
+            console.log(fO);
+
+        });
+
+      },
 
       onReset(event) {
         event.preventDefault()
