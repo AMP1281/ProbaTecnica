@@ -1,10 +1,8 @@
 <template>
 
+  <b-container>
 
-  <b-container fluid="md">
-
-
-      <b-card-group deck>
+      <b-card-group deck class="py-5">
 
         <b-card header="Input Comands">
 
@@ -127,9 +125,16 @@
 
         </b-card>
 
-        <b-card>
-          <p>test</p>
-          <p>{{fY}}</p>
+        <b-card header="Output Comands">
+
+          <b-card-text>
+
+            <p>Command validity: {{Command}} </p>
+            <p>Final Orientation: {{finalOr}}</p>
+            <p>Final Coordinates: ( {{finalX}} , {{finalY}} )</p>
+
+          </b-card-text>
+
         </b-card>
 
      </b-card-group>
@@ -166,8 +171,19 @@ export default {
 
         show: true,
 
+        Command:'',
+        finalOr:'',
+        finalX:'',
+        finalY:'',
+
       }
 
+    },
+
+    computed:{
+      newY(){
+        return parseInt(this.form.iY)
+      } 
     },
 
     methods: {
@@ -184,6 +200,14 @@ export default {
         this.form.iComands.push("R")
       },
 
+      InOut(){
+        if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
+          return this.Command ='False';
+        }else{
+          return this.Command = 'True';
+        }
+      },
+
       onSubmit(event) {
 
         event.preventDefault();
@@ -196,57 +220,51 @@ export default {
         this.form.iComands.forEach(function(element){
 
             if(element == 'A' && self.form.iOrientation == 'N'){ 
-              return fY++ ;
+              return fY++
             }
             if(element == 'A' && self.form.iOrientation == 'S'){
-                return fY-- ;
+              return fY--
             }
             if(element == 'A' && self.form.iOrientation == 'E'){
-                return fX++ ;
+              return fX++
             }
             if(element == 'A' && self.form.iOrientation == 'W'){
-                return fX-- ;
+              return fX--
             }
 
             if(element == 'L' && self.form.iOrientation == 'N'){
-                return fO ='W';
+              return fO ='W'
             }
             if(element == 'L' && self.form.iOrientation == 'S'){
-                return fO ='E' ;
+              return fO ='E'
             }
             if(element == 'L' && self.form.iOrientation == 'E'){
-                return fO='N' ;
+              return fO='N'
             }
             if(element == 'L' && self.form.iOrientation == 'W'){
-                return fO='S' ;
+              return fO='S' 
             }
 
             if(element == 'R' && self.form.iOrientation == 'N'){
-                return fO='E' ;
+              return fO='E'
             }
             if(element == 'R' && self.form.iOrientation == 'S'){
-                return fO='W' ;
+              return fO='W' 
             }
             if(element == 'R' && self.form.iOrientation == 'E'){
-                return fO='S' ;
+              return fO='S' 
             }
             if(element == 'R' && self.form.iOrientation == 'W'){
-                return fO='N' ;
+              return fO='N' 
             }
-
-            console.log(fO);
-
-            inOut();
 
         });
 
-        function inOut(){
-          if(fY>this.iHeight || fX>this.iWidth){
-            return "False";
-          }else{
-            return "True";
-          }
-        }
+          this.finalY= fY;
+          this.finalX= fX;
+          this.finalOr= fO;
+
+      this.InOut();
 
       },
 
@@ -259,6 +277,7 @@ export default {
           this.form.iY='',
           this.form.iOrientation= null,
           this.form.iComands=''
+
         // Trick to reset/clear native browser form validation state
           this.show = false
           this.$nextTick(() => {
