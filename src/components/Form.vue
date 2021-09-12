@@ -4,7 +4,7 @@
 
       <b-card-group deck class="py-5">
 
-        <b-card header="Input Comands">
+        <b-card header="Input Comands" class="shadow p-3 mb-5 bg-white rounded">
 
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
@@ -125,7 +125,7 @@
 
         </b-card>
 
-        <b-card header="Output Comands">
+        <b-card header="Output Comands" class="shadow p-3 mb-5 bg-white rounded">
 
           <b-card-text>
 
