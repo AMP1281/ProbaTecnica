@@ -110,6 +110,7 @@
                       v-model="form.iComands"
                       type="text"
                       required
+                      class="bg-light"
                       readonly>
                     </b-form-input>
 
@@ -219,6 +220,10 @@ export default {
       agregarR(){
         this.form.iComands.push("R")
       },
+
+      agregar(){
+        this.form.iComands.push("R")
+      }
 
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
