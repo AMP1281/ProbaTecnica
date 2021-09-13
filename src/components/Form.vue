@@ -94,7 +94,7 @@
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()">A</b-button>
+                        <b-button variant="outline-secondary" id="Advance" @click="agregar(A)">A</b-button>
                         <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
 
                         <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()">L</b-button>
@@ -221,9 +221,9 @@ export default {
         this.form.iComands.push("R")
       },
 
-      agregar(){
-        this.form.iComands.push("R")
-      }
+      agregar(x){
+        this.form.iComands.push(x)
+      },
 
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
