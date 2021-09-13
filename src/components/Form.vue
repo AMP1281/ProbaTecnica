@@ -129,9 +129,29 @@
 
           <b-card-text>
 
-            <p>Command validity: {{Command}} </p>
-            <p>Final Orientation: {{finalOr}}</p>
-            <p>Final Coordinates: ( {{finalX}} , {{finalY}} )</p>
+            <b-form>
+
+              <b-form-group label="Command validity:">
+                <b-form-input v-model="Command" class="text-center"></b-form-input>
+              </b-form-group>
+
+              <b-form-group label="Final Orientation:">
+                <b-form-input v-model="finalOr" class="text-center"></b-form-input>
+              </b-form-group>
+
+              <b-form-group label="Final Coordinates:">
+
+                <b-form inline class="d-flex justify-content-around">
+
+                  <b-form-input v-model="finalX" class="text-center"></b-form-input>
+                  x
+                  <b-form-input v-model="finalY" class="text-center"></b-form-input>
+
+                </b-form>
+
+              </b-form-group>
+
+            </b-form>
 
           </b-card-text>
 
