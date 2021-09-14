@@ -221,16 +221,19 @@ export default {
         this.form.iComands.push("R")
       },
 
-      //agregar(x){
-      //  this.form.iComands.push(x)
-      //},
-
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
-          return this.Command ='False';
-        }else{
+          return this.Command = 'False';
+        } else {
           return this.Command = 'True';
         }
+      },
+
+      sumar(number){
+          return number +1;
+      },
+      restar(number){
+          return number -1;
       },
 
       onSubmit(event) {
@@ -257,18 +260,20 @@ export default {
 
         this.form.iComands.forEach(function(element){
 
-            if(element == 'A' && self.form.iOrientation == 'N'){ 
-              return fY++
-            }
-            if(element == 'A' && self.form.iOrientation == 'S'){
-              return fY--
-            }
-            if(element == 'A' && self.form.iOrientation == 'E'){
-              return fX++
-            }
-            if(element == 'A' && self.form.iOrientation == 'W'){
-              return fX--
-            }
+            // if(element == 'A'){
+            //   if(self.form.iOrientation == 'N'){
+            //     return fY++;
+            //   }
+            //   if(self.form.iOrientation == 'S'){
+            //     return fY--;
+            //   }
+            //   if(self.form.iOrientation == 'E'){
+            //     return fX++;
+            //   }
+            //   if(self.form.iOrientation == 'W'){
+            //     return fX--;
+            //   }
+            // }
 
             if(element == 'L'){
               return self.form.iOrientation = L[self.form.iOrientation]
@@ -277,8 +282,6 @@ export default {
             if(element == 'R'){
               return self.form.iOrientation = R[self.form.iOrientation]
             }
-
-            console.log(A)
 
         });
 
