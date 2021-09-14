@@ -94,7 +94,7 @@
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="Advance" @click="agregar(A)">A</b-button>
+                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()">A</b-button>
                         <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
 
                         <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()">L</b-button>
@@ -221,9 +221,9 @@ export default {
         this.form.iComands.push("R")
       },
 
-      agregar(x){
-        this.form.iComands.push(x)
-      },
+      //agregar(x){
+      //  this.form.iComands.push(x)
+      //},
 
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
@@ -240,7 +240,20 @@ export default {
         let self = this;
         let fY = this.form.iY;
         let fX = this.form.iX;
-        let fO = this.form.iOrientation;
+
+        const L = {
+          'N': 'W',
+          'S': 'E',
+          'E': 'N',
+          'W': 'S',
+        };
+
+        const R = {
+          'N': 'E',
+          'S': 'W',
+          'E': 'S',
+          'W': 'N',
+        };
 
         this.form.iComands.forEach(function(element){
 
@@ -257,37 +270,21 @@ export default {
               return fX--
             }
 
-            if(element == 'L' && self.form.iOrientation == 'N'){
-              return fO ='W'
-            }
-            if(element == 'L' && self.form.iOrientation == 'S'){
-              return fO ='E'
-            }
-            if(element == 'L' && self.form.iOrientation == 'E'){
-              return fO='N'
-            }
-            if(element == 'L' && self.form.iOrientation == 'W'){
-              return fO='S' 
+            if(element == 'L'){
+              return self.form.iOrientation = L[self.form.iOrientation]
             }
 
-            if(element == 'R' && self.form.iOrientation == 'N'){
-              return fO='E'
+            if(element == 'R'){
+              return self.form.iOrientation = R[self.form.iOrientation]
             }
-            if(element == 'R' && self.form.iOrientation == 'S'){
-              return fO='W' 
-            }
-            if(element == 'R' && self.form.iOrientation == 'E'){
-              return fO='S' 
-            }
-            if(element == 'R' && self.form.iOrientation == 'W'){
-              return fO='N' 
-            }
+
+            console.log(A)
 
         });
 
           this.finalY= fY;
           this.finalX= fX;
-          this.finalOr= fO;
+          this.finalOr = this.form.iOrientation;
 
       this.InOut();
 
