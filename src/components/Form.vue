@@ -229,13 +229,6 @@ export default {
         }
       },
 
-      sumar(number){
-          return number +1;
-      },
-      restar(number){
-          return number -1;
-      },
-
       onSubmit(event) {
 
         event.preventDefault();
@@ -244,12 +237,12 @@ export default {
         let fY = this.form.iY;
         let fX = this.form.iX;
 
-        const A = {
-          'N': this.sumar(this.fY),
-          'S': this.restar(this.fY),
-          'E': this.sumar(this.fX),
-          'W': this.restar(this.fX),
-        };
+        // const A = {
+        //   'N': this.sumarY(),
+        //   'S': this.restarY(),
+        //   'E': this.sumarX(),
+        //   'W': this.restarX(),
+        // };
 
         const L = {
           'N': 'W',
@@ -267,23 +260,24 @@ export default {
 
         this.form.iComands.forEach(function(element){
 
-            // if(element == 'A'){
-            //   if(self.form.iOrientation == 'N'){
-            //     return fY++;
-            //   }
-            //   if(self.form.iOrientation == 'S'){
-            //     return fY--;
-            //   }
-            //   if(self.form.iOrientation == 'E'){
-            //     return fX++;
-            //   }
-            //   if(self.form.iOrientation == 'W'){
-            //     return fX--;
-            //   }
-            // }
-            if(element == 'A'){
-              return A[self.form.iOrientation]()
-            }
+             if(element == 'A'){
+               if(self.form.iOrientation == 'N'){
+                 return fY++;
+               }
+               if(self.form.iOrientation == 'S'){
+                 return fY--;
+               }
+               if(self.form.iOrientation == 'E'){
+                 return fX++;
+               }
+               if(self.form.iOrientation == 'W'){
+                 return fX--;
+               }
+             }
+
+            //if(element == 'A'){
+            //   return A[self.form.iOrientation]
+            //} 
 
             if(element == 'L'){
               return self.form.iOrientation = L[self.form.iOrientation]
