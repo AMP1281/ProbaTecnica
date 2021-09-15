@@ -4,6 +4,8 @@
 
       <b-card-group deck class="py-5">
 
+        <!--INPUT Comands-->
+
         <b-card header="Input Comands" class="shadow p-3 mb-5 bg-white rounded">
 
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
@@ -126,28 +128,35 @@
 
         </b-card>
 
+        <!--OUTPUT Comands-->
+
         <b-card header="Output Comands" class="shadow p-3 mb-5 bg-white rounded">
 
           <b-card-text>
 
             <b-form>
 
+              <!--Final Comands: True/False-->
               <b-form-group label="Command validity:">
-                <b-form-input v-model="Command" class="text-center"></b-form-input>
+                <b-form-input 
+                  v-model="Command" 
+                  class="text-center"
+                  >
+                </b-form-input>
               </b-form-group>
 
+              <!--Final Orientation-->
               <b-form-group label="Final Orientation:">
                 <b-form-input v-model="finalOr" class="text-center"></b-form-input>
               </b-form-group>
 
+              <!--Final Coordinates-->
               <b-form-group label="Final Coordinates:">
 
                 <b-form inline class="d-flex justify-content-around">
-
                   <b-form-input v-model="finalX" class="text-center"></b-form-input>
                   x
                   <b-form-input v-model="finalY" class="text-center"></b-form-input>
-
                 </b-form>
 
               </b-form-group>
@@ -202,9 +211,12 @@ export default {
     },
 
     computed:{
-      newY(){
+      NumX(){
+        return parseInt(this.form.iX)
+      },
+      NumY(){
         return parseInt(this.form.iY)
-      } 
+      }
     },
 
     methods: {
@@ -223,9 +235,9 @@ export default {
 
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
-          return this.Command = 'False';
+          return this.Command="False";
         } else {
-          return this.Command = 'True';
+          return this.Command="True";
         }
       },
 
@@ -236,13 +248,6 @@ export default {
         let self = this;
         let fY = this.form.iY;
         let fX = this.form.iX;
-
-        // const A = {
-        //   'N': this.sumarY(),
-        //   'S': this.restarY(),
-        //   'E': this.sumarX(),
-        //   'W': this.restarX(),
-        // };
 
         const L = {
           'N': 'W',
@@ -275,10 +280,6 @@ export default {
                }
              }
 
-            //if(element == 'A'){
-            //   return A[self.form.iOrientation]
-            //} 
-
             if(element == 'L'){
               return self.form.iOrientation = L[self.form.iOrientation]
             }
@@ -289,8 +290,8 @@ export default {
 
         });
 
-          this.finalY= fY;
-          this.finalX= fX;
+          this.finalY= parseInt(fY);
+          this.finalX= parseInt(fX);
           this.finalOr = this.form.iOrientation;
 
       this.InOut();
