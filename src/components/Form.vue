@@ -210,15 +210,6 @@ export default {
 
     },
 
-    computed:{
-      NumX(){
-        return parseInt(this.form.iX)
-      },
-      NumY(){
-        return parseInt(this.form.iY)
-      }
-    },
-
     methods: {
 
       agregarA() {
@@ -235,9 +226,9 @@ export default {
 
       InOut(){
         if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
-          return this.Command="False";
+          return this.Command = "False";
         } else {
-          return this.Command="True";
+          return this.Command = "True";
         }
       },
 
@@ -290,8 +281,8 @@ export default {
 
         });
 
-          this.finalY= parseInt(fY);
-          this.finalX= parseInt(fX);
+          this.finalY= fY;
+          this.finalX= fX;
           this.finalOr = this.form.iOrientation;
 
       this.InOut();
