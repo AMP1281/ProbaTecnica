@@ -244,6 +244,13 @@ export default {
         let fY = this.form.iY;
         let fX = this.form.iX;
 
+        const A = {
+          'N': this.sumar(this.fY),
+          'S': this.restar(this.fY),
+          'E': this.sumar(this.fX),
+          'W': this.restar(this.fX),
+        };
+
         const L = {
           'N': 'W',
           'S': 'E',
@@ -274,6 +281,9 @@ export default {
             //     return fX--;
             //   }
             // }
+            if(element == 'A'){
+              return A[self.form.iOrientation]()
+            }
 
             if(element == 'L'){
               return self.form.iOrientation = L[self.form.iOrientation]
