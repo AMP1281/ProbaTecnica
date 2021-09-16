@@ -8,7 +8,7 @@
 
         <b-card header="Input Comands" class="shadow p-3 mb-5 bg-white rounded">
 
-          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+          <b-form @submit="onSubmit" @reset="onReset" v-if="show" novalidate>
 
             <!--Dimensions:-->
               <b-form-group label="Dimensions of the square:">
@@ -22,7 +22,8 @@
                       min="0"
                       step="1"
                       placeholder="Width"
-                      class="text-center">
+                      class="text-center"
+                      :number="true">
                     </b-form-input>
 
                   x
@@ -34,7 +35,8 @@
                       min="0"
                       step="1"
                       placeholder="Height"
-                      class="text-center">
+                      class="text-center"
+                      :number="true">
                     </b-form-input>
 
                 </b-form>
@@ -56,6 +58,7 @@
                       step="1"
                       placeholder="X"
                       class="text-center"
+                      :number="true"
                     ></b-form-input>
 
                   x
@@ -68,6 +71,7 @@
                       step="1"
                       placeholder="Y"
                       class="text-center"
+                      :number="true"
                     ></b-form-input>
 
                 </b-form>
@@ -128,21 +132,23 @@
 
         </b-card>
 
-        <!--OUTPUT Comands-->
+        <!----------OUTPUT---------->
 
         <b-card header="Output Comands" class="shadow p-3 mb-5 bg-white rounded">
 
           <b-card-text>
 
-            <b-form>
+            <b-form novalidate>
 
               <!--Final Comands: True/False-->
               <b-form-group label="Command validity:">
-                <b-form-input 
-                  v-model="Command" 
-                  class="text-center"
+                <b-form-input
+                  v-model="finalCommand2"
+                  class="text-center text-capitalize"
+                  :class="{'is-invalid':!finalCommand2,'text-danger':!finalCommand2}"
                   >
                 </b-form-input>
+                <b-form-invalid-feedback>The Rover is outside of the pre-defined initial limits</b-form-invalid-feedback>
               </b-form-group>
 
               <!--Final Orientation-->
@@ -201,7 +207,7 @@ export default {
 
         show: true,
 
-        Command:'',
+        finalCommand2:'',
         finalOr:'',
         finalX:'',
         finalY:'',
@@ -209,6 +215,7 @@ export default {
       }
 
     },
+
 
     methods: {
 
@@ -224,11 +231,11 @@ export default {
         this.form.iComands.push("R")
       },
 
-      InOut(){
-        if(this.finalX > this.form.iX || this.finalY > this.form.iY || this.finalX < 0 || this.finalY < 0){
-          return this.Command = "False";
+      finalCommand(){
+          if(this.finalX > this.form.iWidth || this.finalY > this.form.iHeight || this.finalX < 0 || this.finalY < 0){
+          return false;
         } else {
-          return this.Command = "True";
+          return true;
         }
       },
 
@@ -284,9 +291,7 @@ export default {
           this.finalY= fY;
           this.finalX= fX;
           this.finalOr = this.form.iOrientation;
-
-      this.InOut();
-
+          this.finalCommand2 = this.finalCommand();
       },
 
       onReset(event) {
@@ -298,6 +303,10 @@ export default {
           this.form.iY='',
           this.form.iOrientation= null,
           this.form.iComands=''
+          this.finalCommand2=''
+          this.finalY=''
+          this.finalX=''
+          this.finalOr=''
 
         // Trick to reset/clear native browser form validation state
           this.show = false
