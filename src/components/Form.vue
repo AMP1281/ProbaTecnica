@@ -15,7 +15,7 @@
 
                 <b-form inline class="d-flex justify-content-around">
                     
-                    <InputNumber placeholder="Width" @widthOk="wOk=$event/>
+                    <InputNumber placeholder="Width" @widthOk="wOk=$event"/>
 
                     <b-form-input
                       id="input-1"
@@ -23,10 +23,9 @@
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="Width"
                       class="text-center"
                       :number="true"
-                      @blur="inline">
+                     >
                     </b-form-input>
 
                   x
