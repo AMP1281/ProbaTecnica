@@ -14,23 +14,26 @@
               <b-form-group label="Dimensions of the square:">
 
                 <b-form inline class="d-flex justify-content-around">
+                    
+                    <InputNumber placeholder="Width"/>
 
                     <b-form-input
                       id="input-1"
-                      v-model="form.iWidth"
+                      v-model="iWidth"
                       type="number"
                       min="0"
                       step="1"
                       placeholder="Width"
                       class="text-center"
-                      :number="true">
+                      :number="true"
+                      @blur="inline">
                     </b-form-input>
 
                   x
 
                     <b-form-input
                       id="input-2"
-                      v-model="form.iHeight"
+                      v-model="iHeight"
                       type="number"
                       min="0"
                       step="1"
@@ -52,7 +55,7 @@
 
                     <b-form-input
                       id="input-3"
-                      v-model="form.iX"
+                      v-model="iX"
                       type="number"
                       min="0"
                       step="1"
@@ -65,7 +68,7 @@
 
                     <b-form-input
                       id="input-4"
-                      v-model="form.iY"
+                      v-model="iY"
                       type="number"
                       min="0"
                       step="1"
@@ -84,7 +87,7 @@
                 label="Initial orientation">
                 <b-form-radio-group
                   id="input-5"
-                  v-model="form.iOrientation"
+                  v-model="iOrientation"
                   :options="orientation"
                   class="d-flex justify-content-around"
                   required>
@@ -113,11 +116,12 @@
 
                     <b-form-input
                       id="input-6"
-                      v-model="form.iComands"
+                      v-model="iComands"
                       type="text"
                       required
                       class="bg-light"
                       readonly>
+                      {{iComands}}
                     </b-form-input>
 
                 </b-input-group>
@@ -125,7 +129,7 @@
               </b-form-group>
 
             <!--buttons-->
-              <b-button type="submit" variant="primary">Submit</b-button>
+              <b-button type="submit" onclick="validar()" variant="primary">Submit</b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
 
           </b-form>
@@ -180,10 +184,13 @@
 </template>
 
 <script>
-
+import InputNumber from './InputNumber.vue'
 export default {
-  name: 'Form',
 
+  name: 'Form',
+  components:{
+    InputNumber,
+  },
   data() {
       return {
 
@@ -195,7 +202,7 @@ export default {
           iY:'',
 
           iOrientation: '',
-          iComands: [],
+          iComands2:[],
         },
 
         orientation: [
@@ -216,19 +223,41 @@ export default {
 
     },
 
+    computed: {
+      iWidth:{
+        get () {return this.$store.state.iWidthStore},
+        set (iWidth) {this.$store.commit('updateiWidth', iWidth)},
+      },
+      iHeight:{
+        get () {return this.$store.state.iHeightStore},
+        set (iHeight) {this.$store.commit('updateiHeight', iHeight)},
+      },
+      iX:{
+        get () {return this.$store.state.iXStore},
+        set (iX) {this.$store.commit('updateiX', iX)},
+      },
+      iY:{
+        get () {return this.$store.state.iYStore},
+        set (iY) {this.$store.commit('updateiY', iY)},
+      },
+      iOrientation:{
+        get () {return this.$store.state.iOrientationStore},
+        set (iOrientation) {this.$store.commit('updateiOrientation', iOrientation)},
+      },
+    },
 
     methods: {
 
       agregarA() {
-        this.form.iComands.push("A")
+        this.form.iComands2.push("A")
       },
 
       agregarL(){
-        this.form.iComands.push("L")
+        this.form.iComands2.push("L")
       },
 
       agregarR(){
-        this.form.iComands.push("R")
+        this.form.iComands2.push("R")
       },
 
       finalCommand(){
