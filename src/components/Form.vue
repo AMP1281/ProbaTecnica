@@ -15,7 +15,7 @@
 
                 <b-form inline class="d-flex justify-content-around">
                     
-                    <InputNumber placeholder="Width"/>
+                    <InputNumber placeholder="Width" @widthOk="wOk=$event/>
 
                     <b-form-input
                       id="input-1"
