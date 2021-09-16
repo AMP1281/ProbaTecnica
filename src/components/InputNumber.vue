@@ -41,8 +41,6 @@ export default {
             if(this.placeholder == 'Width'){
                 //Validacio
                 this.obligatori(this.value);
-                this.minMax(this.value);
-                this.lletres(this.value);
                 this.$emit('nombreOk',{arrayNombre:this.lerrores, valorNombre:this.value});//Envio errors i valor del camp al pare per activar boto Enviar
                 !this.lerrores.length? ((this.isActive=false), (this.verde=true), (this.rojo=false)) : ((this.isActive=false),(this.verde=false),(this.rojo=true));//Activo class de Bootstrap invalid o valid depenent si hi han errors en el array
             }
