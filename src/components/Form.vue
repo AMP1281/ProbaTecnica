@@ -19,7 +19,7 @@
                     
                     <b-form-input 
                       id="input-1"
-                      v-model="$v.iWidth.$model"
+                      v-model="iWidth"
                       type="number"
                       min="0"
                       step="1"
@@ -32,7 +32,7 @@
 
                     <b-form-input
                       id="input-2"
-                      v-model="$v.iHeight.$model"
+                      v-model="iHeight"
                       type="number"
                       min="0"
                       step="1"
@@ -54,7 +54,7 @@
 
                     <b-form-input
                       id="input-3"
-                      v-model="$v.iX.$model"
+                      v-model="iX"
                       type="number"
                       min="0"
                       step="1"
@@ -66,7 +66,7 @@
 
                     <b-form-input
                       id="input-4"
-                      v-model="$v.iY.$model"
+                      v-model="iY"
                       type="number"
                       min="0"
                       step="1"
@@ -84,7 +84,7 @@
                 label="Initial orientation">
                 <b-form-radio-group
                   id="input-5"
-                  v-model="$v.iOrientation.$model"
+                  v-model="iOrientation"
                   :options="orientation"
                   class="d-flex justify-content-around"
                   required>
@@ -113,7 +113,7 @@
 
                     <b-form-input
                       id="input-6"
-                      v-model="$v.iComands.$model"
+                      v-model="iComands"
                       type="text"
                       required
                       class="bg-light"
@@ -182,16 +182,14 @@
 
 <script>
 
-import { numeric, required } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, between } from 'vuelidate/lib/validators'
 
 export default {
 
   name: 'Form',
-
+ 
   data() {
       return {
-        v$: useVuelidate(),
 
         iWidth: '',
         iHeight: '',
@@ -219,16 +217,6 @@ export default {
       }
     },
 
-    validations () {
-      return{
-        iWidth: {required, numeric},
-        iHeight: {required, numeric},
-        iX: {required, numeric},
-        iY: {required, numeric},
-        iOrientation: {required},
-        iComands2: {required},
-      }
-    },
 
     computed: {
 
