@@ -19,14 +19,18 @@
                     
                     <b-form-input 
                       id="input-1"
-                      v-model="iWidth"
+                      v-model.trim="$v.iWidth.$model"
                       type="number"
                       min="0"
                       step="1"
                       class="text-center text-capitalize"
                       placeholder="width"
+                      :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"
                      >
                     </b-form-input>
+                    <b-form-invalid-feedback>
+                      *Required
+                    </b-form-invalid-feedback> 
 
                   x
 
@@ -182,7 +186,7 @@
 
 <script>
 
-import { required, minLength, between } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
 
@@ -216,6 +220,12 @@ export default {
 
       }
     },
+
+    validations: {
+      iWidth: {
+        required,
+      },
+  },
 
 
     computed: {
