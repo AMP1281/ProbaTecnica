@@ -8,6 +8,8 @@
 
         <b-card header="Input Comands" class="shadow p-3 mb-5 bg-white rounded">
 
+          <p>Fill in the data below:</p>
+
           <b-form @submit="onSubmit" @reset="onReset" v-if="show" novalidate>
 
             <!--Dimensions:-->
@@ -15,16 +17,14 @@
 
                 <b-form inline class="d-flex justify-content-around">
                     
-                    <InputNumber placeholder="Width" @widthOk="wOk=$event"/>
-
-                    <b-form-input
+                    <b-form-input 
                       id="input-1"
-                      v-model="iWidth"
+                      v-model="$v.iWidth.$model"
                       type="number"
                       min="0"
                       step="1"
-                      class="text-center"
-                      :number="true"
+                      class="text-center text-capitalize"
+                      placeholder="width"
                      >
                     </b-form-input>
 
@@ -32,13 +32,13 @@
 
                     <b-form-input
                       id="input-2"
-                      v-model="iHeight"
+                      v-model="$v.iHeight.$model"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="Height"
-                      class="text-center"
-                      :number="true">
+                      placeholder="height"
+                      class="text-center text-capitalize"
+                    >
                     </b-form-input>
 
                 </b-form>
@@ -54,26 +54,24 @@
 
                     <b-form-input
                       id="input-3"
-                      v-model="iX"
+                      v-model="$v.iX.$model"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="X"
-                      class="text-center"
-                      :number="true"
+                      placeholder="x"
+                      class="text-center text-capitalize"
                     ></b-form-input>
 
                   x
 
                     <b-form-input
                       id="input-4"
-                      v-model="iY"
+                      v-model="$v.iY.$model"
                       type="number"
                       min="0"
                       step="1"
-                      placeholder="Y"
-                      class="text-center"
-                      :number="true"
+                      placeholder="y"
+                      class="text-center text-capitalize"
                     ></b-form-input>
 
                 </b-form>
@@ -86,7 +84,7 @@
                 label="Initial orientation">
                 <b-form-radio-group
                   id="input-5"
-                  v-model="iOrientation"
+                  v-model="$v.iOrientation.$model"
                   :options="orientation"
                   class="d-flex justify-content-around"
                   required>
@@ -115,7 +113,7 @@
 
                     <b-form-input
                       id="input-6"
-                      v-model="iComands"
+                      v-model="$v.iComands.$model"
                       type="text"
                       required
                       class="bg-light"
@@ -128,7 +126,7 @@
               </b-form-group>
 
             <!--buttons-->
-              <b-button type="submit" onclick="validar()" variant="primary">Submit</b-button>
+              <b-button type="submit" variant="primary">Submit</b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
 
           </b-form>
@@ -183,26 +181,26 @@
 </template>
 
 <script>
-import InputNumber from './InputNumber.vue'
+
+import { numeric, required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+
 export default {
 
   name: 'Form',
-  components:{
-    InputNumber,
-  },
+
   data() {
       return {
+        v$: useVuelidate(),
 
-        form: {
-          iWidth: '',
-          iHeight: '',
+        iWidth: '',
+        iHeight: '',
 
-          iX:'',
-          iY:'',
+        iX: '',
+        iY: '',
 
-          iOrientation: '',
-          iComands2:[],
-        },
+        iOrientation: '',
+        iComands2:[],
 
         orientation: [
           { text: 'North', value: 'N'},
@@ -219,27 +217,38 @@ export default {
         finalY:'',
 
       }
+    },
 
+    validations () {
+      return{
+        iWidth: {required, numeric},
+        iHeight: {required, numeric},
+        iX: {required, numeric},
+        iY: {required, numeric},
+        iOrientation: {required},
+        iComands2: {required},
+      }
     },
 
     computed: {
-      iWidth:{
+
+      iWidthS:{
         get () {return this.$store.state.iWidthStore},
         set (iWidth) {this.$store.commit('updateiWidth', iWidth)},
       },
-      iHeight:{
+      iHeightS:{
         get () {return this.$store.state.iHeightStore},
         set (iHeight) {this.$store.commit('updateiHeight', iHeight)},
       },
-      iX:{
+      iXS:{
         get () {return this.$store.state.iXStore},
         set (iX) {this.$store.commit('updateiX', iX)},
       },
-      iY:{
+      iYS:{
         get () {return this.$store.state.iYStore},
         set (iY) {this.$store.commit('updateiY', iY)},
       },
-      iOrientation:{
+      iOrientationS:{
         get () {return this.$store.state.iOrientationStore},
         set (iOrientation) {this.$store.commit('updateiOrientation', iOrientation)},
       },
@@ -248,19 +257,19 @@ export default {
     methods: {
 
       agregarA() {
-        this.form.iComands2.push("A")
+        this.iComands2.push("A")
       },
 
       agregarL(){
-        this.form.iComands2.push("L")
+        this.iComands2.push("L")
       },
 
       agregarR(){
-        this.form.iComands2.push("R")
+        this.iComands2.push("R")
       },
 
       finalCommand(){
-          if(this.finalX > this.form.iWidth || this.finalY > this.form.iHeight || this.finalX < 0 || this.finalY < 0){
+          if(this.finalX > this.iWidth || this.finalY > this.iHeight || this.finalX < 0 || this.finalY < 0){
           return false;
         } else {
           return true;
@@ -269,11 +278,13 @@ export default {
 
       onSubmit(event) {
 
+
+
         event.preventDefault();
 
         let self = this;
-        let fY = this.form.iY;
-        let fX = this.form.iX;
+        let fY = this.iY;
+        let fX = this.iX;
 
         const L = {
           'N': 'W',
@@ -289,48 +300,48 @@ export default {
           'W': 'N',
         };
 
-        this.form.iComands.forEach(function(element){
+        this.iComands.forEach(function(element){
 
              if(element == 'A'){
-               if(self.form.iOrientation == 'N'){
+               if(self.iOrientation == 'N'){
                  return fY++;
                }
-               if(self.form.iOrientation == 'S'){
+               if(self.iOrientation == 'S'){
                  return fY--;
                }
-               if(self.form.iOrientation == 'E'){
+               if(self.iOrientation == 'E'){
                  return fX++;
                }
-               if(self.form.iOrientation == 'W'){
+               if(self.iOrientation == 'W'){
                  return fX--;
                }
              }
 
             if(element == 'L'){
-              return self.form.iOrientation = L[self.form.iOrientation]
+              return self.iOrientation = L[self.iOrientation]
             }
 
             if(element == 'R'){
-              return self.form.iOrientation = R[self.form.iOrientation]
+              return self.iOrientation = R[self.iOrientation]
             }
 
         });
 
           this.finalY= fY;
           this.finalX= fX;
-          this.finalOr = this.form.iOrientation;
+          this.finalOr = this.iOrientation;
           this.finalCommand2 = this.finalCommand();
       },
 
       onReset(event) {
         event.preventDefault()
         // Reset our form values
-          this.form.iWidth= '',
-          this.form.iHeight= '',
-          this.form.iX='',
-          this.form.iY='',
-          this.form.iOrientation= null,
-          this.form.iComands=''
+          this.iWidth= '',
+          this.iHeight= '',
+          this.iX='',
+          this.iY='',
+          this.iOrientation= null,
+          this.iComands=''
           this.finalCommand2=''
           this.finalY=''
           this.finalX=''
