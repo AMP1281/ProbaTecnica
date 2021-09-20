@@ -137,21 +137,23 @@
               <b-form-group 
                 id="input-group-4"
                 label="Comands:"
-                description="Please enter a set of commands: Advance (A), Turn left (L), Turn Right (R). ">
+                description="Please enter a set of commands: Advance, Turn left, Turn Right.">
                 <b-input-group>
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()">A</b-button>
-                        <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
-
-                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()">L</b-button>
+                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()" size="sm"><b-icon icon="arrow-left-circle"></b-icon></b-button>
                         <b-tooltip target="turnLeft" variant="secondary" placement="top">Turn left</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()">R</b-button>
+                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()" size="sm"><b-icon icon="arrow-up-circle"></b-icon></b-button>
+                        <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
+
+                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()" size="sm"><b-icon icon="arrow-right-circle"></b-icon></b-button>
                         <b-tooltip target="turnRight" variant="secondary" placement="topright">Turn Right</b-tooltip>
 
                       </b-input-group-prepend>
+
+
 
                     <b-form-input
                       id="input-6"
@@ -161,8 +163,13 @@
                       class="bg-light"
                       :state="$v.iComands.$dirty ? !$v.iComands.$invalid : null"
                       readonly>
-                      {{iComands}}
+                      {{ iComands.value }}
                     </b-form-input>
+                      <b-input-group-apend>
+                        <b-button variant="outline-secondary" id="erase" @click="borrarE()"><b-icon icon="chevron-left"></b-icon></b-button>
+                        <b-tooltip target="erase" variant="secondary" placement="top">Erase</b-tooltip>
+                      </b-input-group-apend>
+
                     <b-form-invalid-feedback class="position-absolute">
                       {{ iComandsError }}
                     </b-form-invalid-feedback> 
@@ -173,7 +180,7 @@
               </b-form-group>
 
             <!--buttons-->
-              <b-button type="submit" variant="primary">Submit</b-button>
+              <b-button type="submit" variant="primary" :disabled="$v.$invalid">Submit</b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
 
           </b-form>
@@ -347,6 +354,10 @@ export default {
         this.iComands.push("R")
       },
 
+      borrarE(){
+        this.iComands.pop()
+      },
+
       finalCommand(){
           if(this.finalX > this.iWidth || this.finalY > this.iHeight || this.finalX < 0 || this.finalY < 0){
           return false;
@@ -356,6 +367,7 @@ export default {
       },
 
       onSubmit(event) {
+
         event.preventDefault();
 
         let self = this;
@@ -407,6 +419,8 @@ export default {
           this.finalX= fX;
           this.finalOr = this.iOrientation;
           this.finalCommand2 = this.finalCommand();
+        
+
       },
 
       onReset(event) {
