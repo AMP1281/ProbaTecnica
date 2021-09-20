@@ -6,9 +6,7 @@
 
         <!--INPUT Comands-->
 
-        <b-card header="Input Comands" class="shadow p-3 mb-5 bg-white rounded">
-
-          <p>Fill in the data below:</p>
+        <b-card header="Input Comands" class="p-3 mb-5 rounded">
 
           <b-form @submit="onSubmit" @reset="onReset" v-if="show" novalidate>
 
@@ -16,34 +14,47 @@
               <b-form-group label="Dimensions of the square:">
 
                 <b-form inline class="d-flex justify-content-around">
-                    
+
+                  <b-form-group class="position-relative">
+
                     <b-form-input 
                       id="input-1"
+                      size="sm"
                       v-model.trim="$v.iWidth.$model"
                       type="number"
-                      min="0"
+                      min="1"
                       step="1"
                       class="text-center text-capitalize"
                       placeholder="width"
-                      :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"
-                     >
+                      :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"> <!--La lógica de la validación-->
                     </b-form-input>
-                    <b-form-invalid-feedback>
-                      *Required
+                    <b-form-invalid-feedback class="position-absolute">
+                      {{ widthError }} <!--varia si error es empty o fracción-->
                     </b-form-invalid-feedback> 
+
+                  </b-form-group>
 
                   x
 
+                  <b-form-group>
+
                     <b-form-input
                       id="input-2"
-                      v-model="iHeight"
+                      size="sm"
+                      v-model.trim="$v.iHeight.$model"
                       type="number"
-                      min="0"
+                      min="1"
                       step="1"
                       placeholder="height"
-                      class="text-center text-capitalize"
+                      class="text-center text-capitalize position-relative"
+                      :state="$v.iHeight.$dirty ? !$v.iHeight.$invalid : null"
                     >
                     </b-form-input>
+                    <b-form-invalid-feedback class="position-absolute">
+                      {{ heightError }}
+                    </b-form-invalid-feedback> 
+
+                  </b-form-group>
 
                 </b-form>
 
@@ -52,31 +63,52 @@
             <!--Coordinates:-->
               <b-form-group
                 id="input-group-2"
-                label="Initial coordinates:">
+                label="Initial coordinates:"
+                class="mt-4">
 
                 <b-form inline class="d-flex justify-content-around">
+                  
+                  <b-form-group>
 
                     <b-form-input
                       id="input-3"
-                      v-model="iX"
+                      size="sm"
+                      v-model="$v.iX.$model"
                       type="number"
                       min="0"
                       step="1"
                       placeholder="x"
                       class="text-center text-capitalize"
+                      :state="$v.iX.$dirty ? !$v.iX.$invalid : null"
                     ></b-form-input>
+
+                    <b-form-invalid-feedback class="position-absolute">
+                      {{ iXError }}
+                    </b-form-invalid-feedback> 
+
+                  </b-form-group>
 
                   x
 
+                  <b-form-group>
+
                     <b-form-input
                       id="input-4"
-                      v-model="iY"
+                      size="sm"
+                      v-model="$v.iY.$model"
                       type="number"
                       min="0"
                       step="1"
                       placeholder="y"
                       class="text-center text-capitalize"
+                      :state="$v.iY.$dirty ? !$v.iY.$invalid : null"
                     ></b-form-input>
+
+                    <b-form-invalid-feedback class="position-absolute">
+                      {{ iYError }}
+                    </b-form-invalid-feedback> 
+
+                  </b-form-group>
 
                 </b-form>
 
@@ -85,14 +117,20 @@
             <!--Orientation-->
               <b-form-group
                 id="input-group-3"
-                label="Initial orientation">
+                label="Initial orientation"
+                class="mt-4">
                 <b-form-radio-group
                   id="input-5"
-                  v-model="iOrientation"
+                  v-model="$v.iOrientation.$model"
                   :options="orientation"
                   class="d-flex justify-content-around"
+                  :state="$v.iOrientation.$dirty ? !$v.iOrientation.$invalid : null"
                   required>
                 </b-form-radio-group>
+                <b-form-invalid-feedback class="position-absolute">
+                  {{ iOrientationError }}
+                </b-form-invalid-feedback> 
+
               </b-form-group>
 
             <!--Comands-->
@@ -117,13 +155,18 @@
 
                     <b-form-input
                       id="input-6"
-                      v-model="iComands"
+                      v-model="$v.iComands.$model"
                       type="text"
                       required
                       class="bg-light"
+                      :state="$v.iComands.$dirty ? !$v.iComands.$invalid : null"
                       readonly>
                       {{iComands}}
                     </b-form-input>
+                    <b-form-invalid-feedback class="position-absolute">
+                      {{ iComandsError }}
+                    </b-form-invalid-feedback> 
+
 
                 </b-input-group>
 
@@ -162,12 +205,12 @@
               </b-form-group>
 
               <!--Final Coordinates-->
-              <b-form-group label="Final Coordinates:">
+              <b-form-group label="Final coordinates:">
 
                 <b-form inline class="d-flex justify-content-around">
-                  <b-form-input v-model="finalX" class="text-center"></b-form-input>
+                  <b-form-input v-model="finalX" class="text-center" size="sm"></b-form-input>
                   x
-                  <b-form-input v-model="finalY" class="text-center"></b-form-input>
+                  <b-form-input v-model="finalY" class="text-center" size="sm"></b-form-input>
                 </b-form>
 
               </b-form-group>
@@ -186,7 +229,7 @@
 
 <script>
 
-import { required } from 'vuelidate/lib/validators'
+import { required, integer, minValue } from 'vuelidate/lib/validators'//Importando validadores Vuelidate
 
 export default {
 
@@ -202,7 +245,7 @@ export default {
         iY: '',
 
         iOrientation: '',
-        iComands2:[],
+        iComands:[],
 
         orientation: [
           { text: 'North', value: 'N'},
@@ -222,48 +265,86 @@ export default {
     },
 
     validations: {
-      iWidth: {
-        required,
-      },
-  },
+      iWidth: { required, integer, minValue: minValue(1) },
+      iHeight: { required, integer, minValue: minValue(1) },
 
+      iX: { required, integer },
+      iY: { required, integer },
+
+      iOrientation: { required },
+      iComands: { required }
+    },
+
+    errorMessages:{
+      required:'*Required',
+      integer:'*Fraction not valid',
+      minValue:'Minimum value 1'
+    },
 
     computed: {
+      widthError(){
+        return this.getError(this.$v.iWidth.$error,this.$v.iWidth.$params,this.$v.iWidth);
+      },
+      heightError(){
+        return this.getError(this.$v.iHeight.$error,this.$v.iHeight.$params,this.$v.iHeight);
+      },
+      iXError(){
+        return this.getError(this.$v.iX.$error,this.$v.iX.$params,this.$v.iX);
+      },
+      iYError(){
+        return this.getError(this.$v.iY.$error,this.$v.iY.$params,this.$v.iY);
+      },
+      iOrientationError(){
+        return this.getError(this.$v.iOrientation.$error,this.$v.iOrientation.$params,this.$v.iOrientation);
+      },
+      iComandsError(){
+        return this.getError(this.$v.iComands.$error,this.$v.iComands.$params,this.$v.iComands);
+      },
 
-      iWidthS:{
-        get () {return this.$store.state.iWidthStore},
-        set (iWidth) {this.$store.commit('updateiWidth', iWidth)},
-      },
-      iHeightS:{
-        get () {return this.$store.state.iHeightStore},
-        set (iHeight) {this.$store.commit('updateiHeight', iHeight)},
-      },
-      iXS:{
-        get () {return this.$store.state.iXStore},
-        set (iX) {this.$store.commit('updateiX', iX)},
-      },
-      iYS:{
-        get () {return this.$store.state.iYStore},
-        set (iY) {this.$store.commit('updateiY', iY)},
-      },
-      iOrientationS:{
-        get () {return this.$store.state.iOrientationStore},
-        set (iOrientation) {this.$store.commit('updateiOrientation', iOrientation)},
-      },
+      // iWidthS:{
+      //   get () {return this.$store.state.iWidthStore},
+      //   set (iWidth) {this.$store.commit('updateiWidth', iWidth)},
+      // },
+      // iHeightS:{
+      //   get () {return this.$store.state.iHeightStore},
+      //   set (iHeight) {this.$store.commit('updateiHeight', iHeight)},
+      // },
+      // iXS:{
+      //   get () {return this.$store.state.iXStore},
+      //   set (iX) {this.$store.commit('updateiX', iX)},
+      // },
+      // iYS:{
+      //   get () {return this.$store.state.iYStore},
+      //   set (iY) {this.$store.commit('updateiY', iY)},
+      // },
+      // iOrientationS:{
+      //   get () {return this.$store.state.iOrientationStore},
+      //   set (iOrientation) {this.$store.commit('updateiOrientation', iOrientation)},
+      // },
     },
 
     methods: {
+      getError(X,Y,Z){
+        if(X){
+          for(let key in Y){
+            if(Z[key]===false){
+              return this.$options.errorMessages[key]
+            }
+          }
+        }
+        return null
+      },
 
       agregarA() {
-        this.iComands2.push("A")
+        this.iComands.push("A")
       },
 
       agregarL(){
-        this.iComands2.push("L")
+        this.iComands.push("L")
       },
 
       agregarR(){
-        this.iComands2.push("R")
+        this.iComands.push("R")
       },
 
       finalCommand(){
@@ -275,9 +356,6 @@ export default {
       },
 
       onSubmit(event) {
-
-
-
         event.preventDefault();
 
         let self = this;
