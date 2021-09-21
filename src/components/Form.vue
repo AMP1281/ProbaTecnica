@@ -8,7 +8,7 @@
 
         <b-card header="Input Comands" class="p-3 mb-5 rounded">
 
-          <b-form @submit="onSubmit" @reset="onReset" v-if="show" novalidate>
+          <b-form @submit.prevent="onSubmit" @reset="onReset" v-if="show" novalidate>
 
             <!--Dimensions:-->
               <b-form-group label="Dimensions of the square:">
@@ -26,7 +26,10 @@
                       step="1"
                       class="text-center text-capitalize"
                       placeholder="width"
-                      :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"> <!--La lógica de la validación-->
+                      :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"
+                      @input="$v.iWidth.$reset()"
+                      @blur="$v.iWidth.$touch()"
+                      >
                     </b-form-input>
                     <b-form-invalid-feedback class="position-absolute">
                       {{ widthError }} <!--varia si error es empty o fracción-->
@@ -137,38 +140,63 @@
               <b-form-group 
                 id="input-group-4"
                 label="Comands:"
-                description="Please enter a set of commands: Advance, Turn left, Turn Right.">
+                >
+                <template slot="description">
+                Please enter a set of commands:  <b-icon icon="arrow-counterclockwise"></b-icon>Turn left (L),  <b-icon icon="arrow-up"></b-icon>Advance (A),  <b-icon icon="arrow-clockwise"></b-icon>Turn Right (R).
+                </template>
                 <b-input-group>
+
+                
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()" size="sm"><b-icon icon="arrow-left-circle"></b-icon></b-button>
+                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()" size="sm">
+                          <div @mouseover="isHoveredL = true" @mouseleave="isHoveredL = false">
+                            <b-icon v-show="isHoveredL" animation="spin-reverse" icon="arrow-counterclockwise"></b-icon>
+                            <b-icon v-show="!isHoveredL" icon="arrow-counterclockwise"></b-icon>
+                          </div>
+                        </b-button>
                         <b-tooltip target="turnLeft" variant="secondary" placement="top">Turn left</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()" size="sm"><b-icon icon="arrow-up-circle"></b-icon></b-button>
+                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()" size="sm">
+                          <div @mouseover="isHoveredA = true" @mouseleave="isHoveredA = false">
+                            <b-icon v-show="isHoveredA" animation="cylon-vertical" icon="arrow-up" ></b-icon>
+                            <b-icon v-show="!isHoveredA" icon="arrow-up" ></b-icon>
+                          </div>
+                        </b-button>
                         <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()" size="sm"><b-icon icon="arrow-right-circle"></b-icon></b-button>
+                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()" size="sm">
+                          <div @mouseover="isHoveredR = true" @mouseleave="isHoveredR = false">
+                            <b-icon v-show="isHoveredR" animation="spin" icon="arrow-clockwise" ></b-icon>
+                            <b-icon v-show="!isHoveredR" icon="arrow-clockwise" ></b-icon>
+                          </div>
+                        </b-button>
                         <b-tooltip target="turnRight" variant="secondary" placement="topright">Turn Right</b-tooltip>
 
                       </b-input-group-prepend>
 
 
 
-                    <b-form-input
+                    <b-form-textarea
                       id="input-6"
-                      v-model="$v.iComands.$model"
                       type="text"
+                      v-model="iComandsTexto"
                       required
                       class="bg-light"
-                      :state="$v.iComands.$dirty ? !$v.iComands.$invalid : null"
-                      readonly>
-                      {{ iComands.value }}
-                    </b-form-input>
-                      <b-input-group-apend>
+                      size="sm"
+                      readonly
+                      no-resize
+                      rows="2"
+                      max-rows="3">
+                      {{iComandsTexto}}
+                    </b-form-textarea>
+                   
+
+                      <b-input-group-append>
                         <b-button variant="outline-secondary" id="erase" @click="borrarE()"><b-icon icon="chevron-left"></b-icon></b-button>
                         <b-tooltip target="erase" variant="secondary" placement="top">Erase</b-tooltip>
-                      </b-input-group-apend>
+                      </b-input-group-append>
 
                     <b-form-invalid-feedback class="position-absolute">
                       {{ iComandsError }}
@@ -180,7 +208,7 @@
               </b-form-group>
 
             <!--buttons-->
-              <b-button type="submit" variant="primary" :disabled="$v.$invalid">Submit</b-button>
+              <b-button type="submit" variant="primary">Submit</b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
 
           </b-form>
@@ -268,6 +296,10 @@ export default {
         finalX:'',
         finalY:'',
 
+        isHoveredL: false,
+        isHoveredA: false,
+        isHoveredR: false,
+
       }
     },
 
@@ -285,10 +317,14 @@ export default {
     errorMessages:{
       required:'*Required',
       integer:'*Fraction not valid',
-      minValue:'Minimum value 1'
+      minValue:'*Minimum value 1'
     },
 
     computed: {
+      iComandsTexto(){
+        return this.iComands.join(' ');
+      },
+
       widthError(){
         return this.getError(this.$v.iWidth.$error,this.$v.iWidth.$params,this.$v.iWidth);
       },
@@ -368,6 +404,14 @@ export default {
 
       onSubmit(event) {
 
+        this.$v.$tocuch();
+
+        if(this.$v.$invalid){
+          this.submitStatus = 'ERROR'
+        }
+
+        else{
+
         event.preventDefault();
 
         let self = this;
@@ -419,8 +463,7 @@ export default {
           this.finalX= fX;
           this.finalOr = this.iOrientation;
           this.finalCommand2 = this.finalCommand();
-        
-
+        }
       },
 
       onReset(event) {

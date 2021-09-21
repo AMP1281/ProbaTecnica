@@ -16,13 +16,16 @@ export default {
 }
 </script>
 
-<style>
-body { 
-  background: url(../src/assets/mars.jpg) no-repeat center center fixed !important; 
+<style lang="scss">
+html {
+  background: url(../src/assets/mars.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+body {
+  background-color: transparent !important;
 }
 
 
