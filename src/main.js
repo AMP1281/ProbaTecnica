@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import animate from 'animate.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
@@ -15,6 +16,7 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 Vue.use(Vuelidate)
+Vue.use(animate)
 
 
 Vue.config.productionTip = false

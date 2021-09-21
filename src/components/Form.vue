@@ -18,21 +18,19 @@
                   <b-form-group class="position-relative">
 
                     <b-form-input 
-                      id="input-1"
                       size="sm"
-                      v-model.trim="$v.iWidth.$model"
+                      v-model="$v.iWidth.$model"
                       type="number"
                       min="1"
                       step="1"
                       class="text-center text-capitalize"
                       placeholder="width"
                       :state="$v.iWidth.$dirty ? !$v.iWidth.$invalid : null"
-                      @input="$v.iWidth.$reset()"
-                      @blur="$v.iWidth.$touch()"
-                      >
+                      ><!--state. dirty?= si ha estat tocat | resposta true/false->activa el invalid-feedback | null no tocat-->
                     </b-form-input>
+
                     <b-form-invalid-feedback class="position-absolute">
-                      {{ widthError }} <!--varia si error es empty o fracción-->
+                      {{ widthError }} <!--El error varia: empty/fracción/0 | method:getError()-->
                     </b-form-invalid-feedback> 
 
                   </b-form-group>
@@ -42,7 +40,6 @@
                   <b-form-group>
 
                     <b-form-input
-                      id="input-2"
                       size="sm"
                       v-model.trim="$v.iHeight.$model"
                       type="number"
@@ -53,6 +50,7 @@
                       :state="$v.iHeight.$dirty ? !$v.iHeight.$invalid : null"
                     >
                     </b-form-input>
+
                     <b-form-invalid-feedback class="position-absolute">
                       {{ heightError }}
                     </b-form-invalid-feedback> 
@@ -65,7 +63,6 @@
 
             <!--Coordinates:-->
               <b-form-group
-                id="input-group-2"
                 label="Initial coordinates:"
                 class="mt-4">
 
@@ -74,7 +71,6 @@
                   <b-form-group>
 
                     <b-form-input
-                      id="input-3"
                       size="sm"
                       v-model="$v.iX.$model"
                       type="number"
@@ -96,7 +92,6 @@
                   <b-form-group>
 
                     <b-form-input
-                      id="input-4"
                       size="sm"
                       v-model="$v.iY.$model"
                       type="number"
@@ -119,18 +114,16 @@
 
             <!--Orientation-->
               <b-form-group
-                id="input-group-3"
                 label="Initial orientation"
                 class="mt-4">
                 <b-form-radio-group
-                  id="input-5"
                   v-model="$v.iOrientation.$model"
                   :options="orientation"
                   class="d-flex justify-content-around"
                   :state="$v.iOrientation.$dirty ? !$v.iOrientation.$invalid : null"
-                  required>
+                  required> 
                 </b-form-radio-group>
-                <b-form-invalid-feedback class="position-absolute">
+                <b-form-invalid-feedback class="position-absolute" :force-show="$v.iOrientation.$dirty">
                   {{ iOrientationError }}
                 </b-form-invalid-feedback> 
 
@@ -138,19 +131,18 @@
 
             <!--Comands-->
               <b-form-group 
-                id="input-group-4"
                 label="Comands:"
+                class="mt-4"
                 >
                 <template slot="description">
-                Please enter a set of commands:  <b-icon icon="arrow-counterclockwise"></b-icon>Turn left (L),  <b-icon icon="arrow-up"></b-icon>Advance (A),  <b-icon icon="arrow-clockwise"></b-icon>Turn Right (R).
+                  Please enter a set of commands:  <b-icon icon="arrow-counterclockwise"></b-icon>Turn left (L),  <b-icon icon="arrow-up"></b-icon>Advance (A),  <b-icon icon="arrow-clockwise"></b-icon>Turn Right (R).
                 </template>
-                <b-input-group>
 
-                
+                <b-input-group>
 
                       <b-input-group-prepend>
 
-                        <b-button variant="outline-secondary" id="turnLeft" @click="agregarL()" size="sm">
+                        <b-button variant="outline-secondary" id="turnLeft" @click="agregar(L)" size="sm">
                           <div @mouseover="isHoveredL = true" @mouseleave="isHoveredL = false">
                             <b-icon v-show="isHoveredL" animation="spin-reverse" icon="arrow-counterclockwise"></b-icon>
                             <b-icon v-show="!isHoveredL" icon="arrow-counterclockwise"></b-icon>
@@ -158,7 +150,7 @@
                         </b-button>
                         <b-tooltip target="turnLeft" variant="secondary" placement="top">Turn left</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="Advance" @click="agregarA()" size="sm">
+                        <b-button variant="outline-secondary" id="Advance" @click="agregar(A)" size="sm">
                           <div @mouseover="isHoveredA = true" @mouseleave="isHoveredA = false">
                             <b-icon v-show="isHoveredA" animation="cylon-vertical" icon="arrow-up" ></b-icon>
                             <b-icon v-show="!isHoveredA" icon="arrow-up" ></b-icon>
@@ -166,7 +158,7 @@
                         </b-button>
                         <b-tooltip target="Advance" variant="secondary" placement="topleft">Advance</b-tooltip>
 
-                        <b-button variant="outline-secondary" id="turnRight" @click="agregarR()" size="sm">
+                        <b-button variant="outline-secondary" id="turnRight" @click="agregar(R)" size="sm">
                           <div @mouseover="isHoveredR = true" @mouseleave="isHoveredR = false">
                             <b-icon v-show="isHoveredR" animation="spin" icon="arrow-clockwise" ></b-icon>
                             <b-icon v-show="!isHoveredR" icon="arrow-clockwise" ></b-icon>
@@ -176,40 +168,34 @@
 
                       </b-input-group-prepend>
 
-
-
                     <b-form-textarea
-                      id="input-6"
                       type="text"
-                      v-model="iComandsTexto"
+                      v-model="$v.iComandsTexto.$model"
                       required
                       class="bg-light"
                       size="sm"
                       readonly
                       no-resize
                       rows="2"
-                      max-rows="3">
-                      {{iComandsTexto}}
+                      :state="$v.iComandsTexto.$dirty? !$v.iComandsTexto.$invalid : null">
                     </b-form-textarea>
-                   
 
                       <b-input-group-append>
-                        <b-button variant="outline-secondary" id="erase" @click="borrarE()"><b-icon icon="chevron-left"></b-icon></b-button>
+                        <b-button variant="outline-secondary" id="erase" @click="borrarE()" size="sm"><b-icon icon="chevron-left"></b-icon></b-button>
                         <b-tooltip target="erase" variant="secondary" placement="top">Erase</b-tooltip>
                       </b-input-group-append>
 
-                    <b-form-invalid-feedback class="position-absolute">
+                    <b-form-invalid-feedback class="position-absolute mt-5 pt-4">
                       {{ iComandsError }}
                     </b-form-invalid-feedback> 
-
 
                 </b-input-group>
 
               </b-form-group>
 
             <!--buttons-->
-              <b-button type="submit" variant="primary">Submit</b-button>
-              <b-button type="reset" variant="danger">Reset</b-button>
+              <b-button type="submit" variant="primary" class="mt-4">Submit</b-button>
+              <b-button type="reset" variant="danger" class="mt-4">Reset</b-button>
 
           </b-form>
 
@@ -225,13 +211,18 @@
 
               <!--Final Comands: True/False-->
               <b-form-group label="Command validity:">
+
                 <b-form-input
                   v-model="finalCommand2"
                   class="text-center text-capitalize"
-                  :class="{'is-invalid':!finalCommand2,'text-danger':!finalCommand2}"
-                  >
+                  :state="this.finalCommand2===false? false : null"
+                >
                 </b-form-input>
-                <b-form-invalid-feedback>The Rover is outside of the pre-defined initial limits</b-form-invalid-feedback>
+
+                <b-form-invalid-feedback class="animate__animated animate__flash">
+                  The Rover is outside of the pre-defined initial limits
+                </b-form-invalid-feedback>
+
               </b-form-group>
 
               <!--Final Orientation-->
@@ -291,7 +282,8 @@ export default {
 
         show: true,
 
-        finalCommand2:'',
+        finalCommand2: null,
+
         finalOr:'',
         finalX:'',
         finalY:'',
@@ -300,7 +292,14 @@ export default {
         isHoveredA: false,
         isHoveredR: false,
 
+        submitStatus: null,
+
+        L: "L",
+        A: "A",
+        R: "R"
+
       }
+
     },
 
     validations: {
@@ -311,7 +310,8 @@ export default {
       iY: { required, integer },
 
       iOrientation: { required },
-      iComands: { required }
+      iComandsTexto: { required },
+
     },
 
     errorMessages:{
@@ -321,6 +321,7 @@ export default {
     },
 
     computed: {
+
       iComandsTexto(){
         return this.iComands.join(' ');
       },
@@ -341,7 +342,7 @@ export default {
         return this.getError(this.$v.iOrientation.$error,this.$v.iOrientation.$params,this.$v.iOrientation);
       },
       iComandsError(){
-        return this.getError(this.$v.iComands.$error,this.$v.iComands.$params,this.$v.iComands);
+        return this.getError(this.$v.iComandsTexto.$error,this.$v.iComandsTexto.$params,this.$v.iComandsTexto);
       },
 
       // iWidthS:{
@@ -367,6 +368,7 @@ export default {
     },
 
     methods: {
+
       getError(X,Y,Z){
         if(X){
           for(let key in Y){
@@ -378,16 +380,8 @@ export default {
         return null
       },
 
-      agregarA() {
-        this.iComands.push("A")
-      },
-
-      agregarL(){
-        this.iComands.push("L")
-      },
-
-      agregarR(){
-        this.iComands.push("R")
+      agregar(x){
+        this.iComands.push(x)
       },
 
       borrarE(){
@@ -404,7 +398,7 @@ export default {
 
       onSubmit(event) {
 
-        this.$v.$tocuch();
+        this.$v.$touch();
 
         if(this.$v.$invalid){
           this.submitStatus = 'ERROR'
@@ -458,7 +452,6 @@ export default {
             }
 
         });
-
           this.finalY= fY;
           this.finalX= fX;
           this.finalOr = this.iOrientation;
@@ -474,7 +467,7 @@ export default {
           this.iX='',
           this.iY='',
           this.iOrientation= null,
-          this.iComands=''
+          this.iComandsTexto=''
           this.finalCommand2=''
           this.finalY=''
           this.finalX=''
