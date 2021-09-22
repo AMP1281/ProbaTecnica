@@ -4,7 +4,7 @@
 
         <b-card header="Input Comands" class="p-3 mb-5 rounded h-100 w-100 pt-4">
 
-          <b-form @submit.prevent="onSubmit" @reset="onReset" novalidate>
+          <b-form @submit.prevent="onSubmit" novalidate>
 
             <b-form-group :disabled="this.bloqueado">
 
@@ -402,12 +402,9 @@ export default {
         }
       
       },
-
-       onReset(event) {
-        event.preventDefault()
-       }
     }
 }
+
 </script>
 
 <style scoped>

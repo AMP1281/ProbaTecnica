@@ -22,18 +22,18 @@
                 >
                 </b-form-input>
 
-                <b-form-invalid-feedback class="animate__animated animate__flash">
+                <b-form-invalid-feedback class="animate__animated animate__flash position-absolute">
                   The Rover is outside of the pre-defined initial limits
                 </b-form-invalid-feedback>
 
-                <b-form-valid-feedback class="animate__animated animate__pulse">
+                <b-form-valid-feedback class="animate__animated animate__pulse position-absolute">
                   The Rover is inside of the pre-defined initial limits
                 </b-form-valid-feedback>
 
               </b-form-group>
 
               <!--Final Orientation-->
-              <b-form-group label="Final Orientation:">
+              <b-form-group label="Final Orientation:" class="mt-4">
                 <b-form-input
                 v-model="finalOr"
                 class="text-center"
@@ -42,7 +42,7 @@
               </b-form-group>
 
               <!--Final Coordinates-->
-              <b-form-group label="Final coordinates:">
+              <b-form-group label="Final coordinates:" class="mt-4">
 
                 <b-form inline class="d-flex justify-content-around">
                   <b-form-input 
