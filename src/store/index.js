@@ -5,34 +5,26 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    iWidthStore:'',
-    iHeightStore:'',
-    iXStore:'',
-    iYStore:'',
-    iOrientationStore:'',
-    iComandsStore:'',
+
+    finalCommand2:'',
+    finalOr:'',
+    finalX:'',
+    finalY:'',
+
   },
   mutations: {
-    updateiWidth(state,param){
-      state.iWidthStore = param
+    updateFinalCommand2(state, message){
+      state.finalCommand2 = message
     },
-    updateiHeight(state,param){
-      state.iHeightStore = param
+    updateFinalOr(state, message){
+      state.finalOr = message
     },
-    updateiX(state,param){
-      state.iXStore = param
+    updateFinalX(state, message){
+      state.finalX = message
     },
-    updateiY(state,param){
-      state.iYStore = param
-    },
-    updateiOrientation(state,param){
-      state.iOrientationStore = param
+    updateFinalY(state, message){
+      state.finalY = message
     },
   },
-  actions: {
- 
-  },
-  modules: {
 
-  }
 })
