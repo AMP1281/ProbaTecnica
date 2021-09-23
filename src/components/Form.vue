@@ -255,8 +255,8 @@ export default {
 
     validations(){
       return{
-        iWidth: { required, integer, minValue: minValue(1), numeric },
-        iHeight: { required, integer, minValue: minValue(1), numeric },
+        iWidth: { required, integer, minValue: minValue(0), numeric },
+        iHeight: { required, integer, minValue: minValue(0), numeric },
 
         iX: { required, integer, numeric },
         iY: { required, integer, numeric },
