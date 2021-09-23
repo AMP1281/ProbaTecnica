@@ -210,7 +210,7 @@
 
 <script>
 
-import { required, integer, minValue } from 'vuelidate/lib/validators'
+import { required, integer, minValue, numeric } from 'vuelidate/lib/validators'
 
 export default {
 
@@ -255,11 +255,11 @@ export default {
 
     validations(){
       return{
-        iWidth: { required, integer, minValue: minValue(1) },
-        iHeight: { required, integer, minValue: minValue(1) },
+        iWidth: { required, integer, minValue: minValue(1), numeric },
+        iHeight: { required, integer, minValue: minValue(1), numeric },
 
-        iX: { required, integer },
-        iY: { required, integer },
+        iX: { required, integer, numeric },
+        iY: { required, integer, numeric },
 
         iOrientation: { required },
         iComandsTexto: { required },
@@ -269,7 +269,8 @@ export default {
     errorMessages:{
       required:'*Required',
       integer:'*Fraction not valid',
-      minValue:'*Minimum value 1'
+      minValue:'*Minimum value 1',
+      numeric: '*Accepts only numerics'
     },
 
     computed:{
