@@ -303,10 +303,10 @@ export default {
 
     methods: {
       getError(X,Y,Z){
-        if(X){
-          for(let key in Y){
-            if(Z[key]===false){
-              return this.$options.errorMessages[key]
+        if(X){                                        //si hay un error
+          for(let key in Y){                          //Recorre las propiedades de params ()
+            if(Z[key]===false){                       //Cuando la propiedad sea false
+              return this.$options.errorMessages[key] //Retorna el error asociado a esa propiedad
             }
           }
         }
