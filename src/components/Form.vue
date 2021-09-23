@@ -118,9 +118,9 @@
                     v-model="$v.iOrientation.$model"
                     :options="orientation"
                     class="d-flex justify-content-around"
-                    :state="$v.iOrientation.$dirty ? !$v.iOrientation.$invalid : null"
-                    required> 
+                    required>
                   </b-form-radio-group>
+
                   <b-form-invalid-feedback class="position-absolute" :force-show="$v.iOrientation.$dirty">
                     {{ iOrientationError }}
                   </b-form-invalid-feedback> 
@@ -174,8 +174,7 @@
                         size="sm"
                         readonly
                         no-resize
-                        rows="2"
-                        :state="$v.iComandsTexto.$dirty? !$v.iComandsTexto.$invalid : null">
+                        rows="2">
                       </b-form-textarea>
 
                         <b-input-group-append>
@@ -183,7 +182,7 @@
                           <b-tooltip target="erase" variant="secondary" placement="top">Erase</b-tooltip>
                         </b-input-group-append>
 
-                      <b-form-invalid-feedback class="position-absolute mt-5 pt-4">
+                      <b-form-invalid-feedback class="position-absolute mt-5 pt-4" :force-show="$v.iOrientation.$dirty">
                         {{ iComandsError }}
                       </b-form-invalid-feedback> 
 
@@ -224,7 +223,7 @@ export default {
         iX: '',
         iY: '',
 
-        iOrientation: '',
+        iOrientation: null,
         iComands:[],
 
         orientation: [
@@ -331,11 +330,11 @@ export default {
       },
 
       onSubmit(event) {
-
-        this.$v.$touch();
+        
+        this.$v.$touch();//Pone todos los valores de dirty a true, para revisar si hay algún campo invalido
 
         if(this.$v.$invalid){
-          this.submitStatus = 'ERROR'
+          this.submitStatus = 'ERROR' //Si encuentra invalidos STOP Submit
         }
 
         else{
